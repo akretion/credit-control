@@ -461,12 +461,8 @@ class OverdueReminderStep(models.TransientModel):
                     res = self.env['report'].get_pdf(
                         [inv.id], 'account.report_invoice'), 'pdf'
                 else:
-                    context = dict(self.env.context)
-                    context['report_name'] = 'account.report_invoice'
-                    py3o_report = self.env['py3o.report'].create({
-                        'ir_actions_report_xml_id': inv_report.id
-                    }).with_context(context)
-                    res = py3o_report.create_report([inv.id], {})
+                    res = inv_report.render_report(
+                        [inv.id], inv_report.report_name, {})
                     if not res:
                         raise UserError(_(
                             "Report format '%s' is not supported.")
