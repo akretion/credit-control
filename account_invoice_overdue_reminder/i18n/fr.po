@@ -352,7 +352,7 @@ msgstr "Délai minimum par défaut pour les relances d'impayés (jours)"
 #: model:ir.model.fields,field_description:account_invoice_overdue_reminder.field_account_config_settings_overdue_reminder_start_days
 #: model:ir.model.fields,field_description:account_invoice_overdue_reminder.field_res_company_overdue_reminder_start_days
 msgid "Default Overdue Reminder Trigger Delay (days)"
-msgstr "Délai de déclanchement des relances d'impayés par défaut (jours)"
+msgstr "Délai de déclenchement des relances d'impayés par défaut (jours)"
 
 #. module: account_invoice_overdue_reminder
 #: model:ir.model.fields,field_description:account_invoice_overdue_reminder.field_account_config_settings_overdue_reminder_interface
@@ -368,7 +368,7 @@ msgstr "Intervalle minimum par défaut entre relances d'impayés"
 #. module: account_invoice_overdue_reminder
 #: model:ir.ui.view,arch_db:account_invoice_overdue_reminder.view_account_config_settings
 msgid "Default Reminder Trigger Delay"
-msgstr "Délai de déclanchement des relances client par défaut"
+msgstr "Délai de déclenchement des relances client par défaut"
 
 #. module: account_invoice_overdue_reminder
 #: model:ir.ui.view,arch_db:account_invoice_overdue_reminder.report_overdue_reminder_document
@@ -731,7 +731,7 @@ msgstr "Un par un"
 #. module: account_invoice_overdue_reminder
 #: model:ir.ui.view,arch_db:account_invoice_overdue_reminder.overdue_reminder_start_form
 msgid "Options"
-msgstr "Produits suggérés"
+msgstr "Options"
 
 #. module: account_invoice_overdue_reminder
 #: model:ir.ui.view,arch_db:account_invoice_overdue_reminder.overdue_reminder_step_form
@@ -1050,7 +1050,7 @@ msgstr "Total in"
 #. module: account_invoice_overdue_reminder
 #: model:ir.model.fields,field_description:account_invoice_overdue_reminder.field_overdue_reminder_start_start_days
 msgid "Trigger Delay"
-msgstr "Délai de déclanchement"
+msgstr "Délai de déclenchement"
 
 #. module: account_invoice_overdue_reminder
 #: model:ir.model.fields,field_description:account_invoice_overdue_reminder.field_account_invoice_overdue_reminder_action_reminder_type
