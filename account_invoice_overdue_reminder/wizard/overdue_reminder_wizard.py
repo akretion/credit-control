@@ -400,7 +400,12 @@ class OverdueReminderStep(models.TransientModel):
             mail_subject = mail_tpl_lang._render_template(
                 mail_tpl_lang.subject, self._name, [step.id]
             )[step.id]
-            mail_body = mail_tpl_lang._render_template(
+            # amount residual is not computed during onchange (with NewId)
+            amount_residuals = {}
+            for move in self.invoice_ids:
+                origin_move = self.env["account.move"].browse(move.ids[0])
+                amount_residuals[move.id] = origin_move.amount_residual
+            mail_body = mail_tpl_lang.with_context(amount_residual=amount_residuals)._render_template(
                 mail_tpl_lang.body_html, self._name, [step.id]
             )[step.id]
             mail_body = tools.html_sanitize(mail_body)
