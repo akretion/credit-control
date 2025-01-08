@@ -20,6 +20,7 @@ class ResPartner(models.Model):
         string="Total Sales Orders Not Invoiced",
         currency_field="risk_currency_id",
         help="Total not invoiced of sales orders in Sale Order state",
+        company_dependent=True,
     )
 
     def _get_risk_sale_order_domain(self):
