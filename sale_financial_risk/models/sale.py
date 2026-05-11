@@ -3,6 +3,7 @@
 
 from odoo import _, api, fields, models
 from odoo.tools import float_round
+from odoo.exceptions import RedirectWarning
 
 
 class SaleOrder(models.Model):
@@ -38,18 +39,18 @@ class SaleOrder(models.Model):
                 partner = order.partner_invoice_id.commercial_partner_id
                 exception_msg = order.evaluate_risk_message(partner)
                 if exception_msg:
-                    return (
-                        self.env["partner.risk.exceeded.wiz"]
-                        .create(
-                            {
-                                "exception_msg": exception_msg,
-                                "partner_id": partner.id,
-                                "origin_reference": "%s,%s" % ("sale.order", order.id),
-                                "continue_method": "action_confirm",
-                            }
-                        )
-                        .action_show()
+                    raise RedirectWarning(
+                        exception_msg + " Do you want to force confirmation ?",
+                        self.env.ref('sale_financial_risk.action_force_confirm_sale').id,
+                        "Continue",
+                        additional_context={
+                        'active_model': 'sale.order',
+                        'active_id': order.id
+                        }
                     )
+
+
+
         return super().action_confirm()
 
     @api.model
