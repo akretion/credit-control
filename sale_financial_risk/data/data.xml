@@ -6,8 +6,7 @@
             <field name="model_id" ref="sale.model_sale_order"/>
             <field name="state">code</field>
             <field name="code">
-if env.context.get('active_id'):
-    record = env['sale.order'].browse(env.context['active_id'])
+if record:
     record.with_context(bypass_risk=True).action_confirm() 
     action = {
         'type': 'ir.actions.client',
