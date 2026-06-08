@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_force_confirm_sale" model="ir.actions.server">
+            <field name="name">Force Confirm Sale</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="state">code</field>
+            <field name="code">
+if record:
+    record.with_context(bypass_risk=True).action_confirm() 
+    action = {
+        'type': 'ir.actions.client',
+        'tag': 'reload',
+    }
+            </field>
+        </record>
+    </data>
+</odoo>
