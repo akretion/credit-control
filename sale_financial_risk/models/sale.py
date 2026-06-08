@@ -40,9 +40,9 @@ class SaleOrder(models.Model):
                 exception_msg = order.evaluate_risk_message(partner)
                 if exception_msg:
                     raise RedirectWarning(
-                        exception_msg + " Do you want to force confirmation ?",
+                        exception_msg + " Souhaitez vous forcer la confirmation ?",
                         self.env.ref('sale_financial_risk.action_force_confirm_sale').id,
-                        "Continue",
+                        "Continuer",
                         additional_context={
                         'active_model': 'sale.order',
                         'active_id': order.id
