@@ -1,0 +1,37 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_credit_control_contact
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-11 19:50+0000\n"
+"PO-Revision-Date: 2026-07-11 19:50+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_credit_control_contact
+#: model:ir.model.fields,field_description:account_credit_control_contact.field_res_partner__type
+#: model:ir.model.fields,field_description:account_credit_control_contact.field_res_users__type
+msgid "Address Type"
+msgstr "Type d'adresse"
+
+#. module: account_credit_control_contact
+#: model:ir.model,name:account_credit_control_contact.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: account_credit_control_contact
+#: model:ir.model.fields.selection,name:account_credit_control_contact.selection__res_partner__type__credit_control
+msgid "Credit control"
+msgstr "Relances client"
+
+#. module: account_credit_control_contact
+#: model:ir.model,name:account_credit_control_contact.model_credit_control_communication
+msgid "credit control communication"
+msgstr "Lettre de relance"
