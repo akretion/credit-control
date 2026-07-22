@@ -111,6 +111,21 @@
         <field name="model">overdue.reminder.step</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button
+                        name="validate"
+                        type="object"
+                        string="Validate"
+                        class="btn-primary"
+                    />
+                    <button
+                        name="skip"
+                        type="object"
+                        string="Skip"
+                        class="btn-secondary"
+                    />
+                    <button special="cancel" string="Cancel" class="btn-default" />
+                </header>
                 <group name="main">
                     <group name="main-left">
                         <field name="commercial_partner_id" />
