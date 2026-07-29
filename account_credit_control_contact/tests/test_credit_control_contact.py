@@ -37,7 +37,7 @@ class TestCreditControlContact(BaseCommon):
                 "name": "Credit Control Contact",
                 "is_company": False,
                 "parent_id": cls.company.id,
-                "type": "credit_control",
+                "type": "dunning",
                 "email": "credit-control@example.com",
             }
         )
@@ -49,7 +49,7 @@ class TestCreditControlContact(BaseCommon):
         """
         Communication = self.env["credit.control.communication"]
         credit_control_contact = self.env["res.partner"].search(
-            [("parent_id", "=", self.company.id), ("type", "=", "credit_control")]
+            [("parent_id", "=", self.company.id), ("type", "=", "dunning")]
         )
         comm = Communication.new({"partner_id": self.company.id})
         comm._onchange_partner_id()
@@ -103,7 +103,7 @@ class TestCreditControlContact(BaseCommon):
                 "name": "CC No Email",
                 "is_company": False,
                 "parent_id": company_no_email_cc.id,
-                "type": "credit_control",
+                "type": "dunning",
                 "email": False,
             }
         )
@@ -142,7 +142,7 @@ class TestCreditControlContact(BaseCommon):
                 "name": "CC No Email",
                 "is_company": False,
                 "parent_id": company2.id,
-                "type": "credit_control",
+                "type": "dunning",
                 "email": False,
             }
         )
