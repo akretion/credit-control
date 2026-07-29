@@ -2,7 +2,7 @@
 {
     "name": "Account Dunning Contact",
     "version": "18.0.1.0.0",
-    "author": "Akretion," "Odoo Community Association (OCA),",
+    "author": "Akretion, Odoo Community Association (OCA)",
     "category": "Finance",
     "depends": ["base"],
     "website": "https://github.com/OCA/credit-control",
