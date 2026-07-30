@@ -1,1 +1,2 @@
-Add possiblity to address the overdue reminder to a dunning dedicated contact.
+Add the possibility to send the overdue reminder to the dunning contact of the
+customer.
