@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2020 Akretion France (http://www.akretion.com/)
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="view_account_config_settings" model="ir.ui.view">
+        <field name="name">account settings </field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <block id="invoicing_settings" position="after">
+                <block id="pre_due_reminder" title="Factures arrivant à échéance">
+                    <setting id="pre_duedate_reminder_interval_days">
+                        <field
+                            name="pre_duedate_reminder_interval_days"
+                            class="oe_inline"
+                        />
+                        <span> days</span>
+                    </setting>
+                </block>
+            </block>
+        </field>
+    </record>
+</odoo>

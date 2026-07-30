@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo noupdate="1">
+    <record
+        forcecreate="True"
+        id="ir_cron_pre_duedate_invoice_reminder"
+        model="ir.cron"
+    >
+        <field name="name">Invoice pre due date reminder</field>
+        <field eval="False" name="active" />
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="code">model._pre_duedate_reminder_scheduler()</field>
+    </record>
+
+    <record id="pre_duedate_invoice_reminder_mail_template" model="mail.template">
+        <field name="name">Invoice pre due date reminder</field>
+        <field name="email_from" />
+        <field
+            name="subject"
+        >${object.company_id.name} - Rappel facture arrivant à échéance</field>
+        <field name="email_to">${object.partner_id.email}</field>
+        <field
+            name="model_id"
+            ref="account_invoice_pre_duedate_reminder.model_pre_duedate_reminder"
+        />
+        <field name="auto_delete" eval="True" />
+        <field name="lang" />
+        <field
+            name="body_html"
+        ><![CDATA[
+<div style="margin: 0px; padding: 0px; font-size: 13px;">
+<p>Cher client,</p>
+
+<p>Les factures suivantes sont impayées et arrivent à échance:</p>
+
+% for inv in object.invoice_ids.sorted(key='invoice_date'):
+    <li>
+        Facture : ${inv.name}, date d'échéance : ${format_date(inv.invoice_date_due)}, montant total : ${format_amount(inv.amount_total_signed, inv.currency_id)}
+    </li>
+% endfor
+<br>
+
+<p>Si vous avez déjà payé ces factures entre temps, veuillez ne pas considerer cet email.</p>
+
+% if object.company_id.overdue_reminder_attach_invoice:
+<p>Vous trouverez ci-joint les factures concernées.</p>
+% endif
+
+<p>Cordialement,</p>
+
+</div>
+]]></field>
+    </record>
+</odoo>

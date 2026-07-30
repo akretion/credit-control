@@ -1,0 +1,163 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* account_invoice_pre_duedate_reminder
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-09 09:01+0000\n"
+"PO-Revision-Date: 2021-04-09 09:01+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:mail.template,body_html:account_invoice_pre_duedate_reminder.pre_duedate_invoice_reminder_mail_template
+msgid "\n"
+"<div style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"<p style=\"margin:0px 0px 9px 0px;\">Cher client,</p>\n"
+"\n"
+"<p style=\"margin:0px 0px 9px 0px;\">Les factures suivantes sont impayées et arrivent à échance:</p>\n"
+"\n"
+"% for inv in object.invoice_ids.sorted(key='date_invoice'):\n"
+"    <li>\n"
+"        Facture : ${inv.number}, date d'échéance : ${format_date(inv.date_due)}, montant total : ${format_amount(inv.amount_total_signed, inv.currency_id)}\n"
+"    </li>\n"
+"% endfor\n"
+"<br>\n"
+"\n"
+"<p style=\"margin:0px 0px 9px 0px;\">Si vous avez déjà payé ces factures entre temps, veuillez ne pas considerer cet email.</p>\n"
+"\n"
+"% if object.company_id.overdue_reminder_attach_invoice:\n"
+"<p style=\"margin:0px 0px 9px 0px;\">Vous trouverez ci-joint les factures concernées.</p>\n"
+"% endif\n"
+"\n"
+"<p style=\"margin:0px 0px 9px 0px;\">Cordialement,</p>\n"
+"\n"
+"</div>\n"
+""
+msgstr "\n"
+"<div style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"<p style=\"margin:0px 0px 9px 0px;\">Cher client,</p>\n"
+"\n"
+"<p style=\"margin:0px 0px 9px 0px;\">Les factures suivantes sont impayées et arrivent à échance:</p>\n"
+"\n"
+"% for inv in object.invoice_ids.sorted(key='date_invoice'):\n"
+"    <li>\n"
+"        Facture : ${inv.number}, date d'échéance : ${format_date(inv.date_due)}, montant total : ${format_amount(inv.amount_total_signed, inv.currency_id)}\n"
+"    </li>\n"
+"% endfor\n"
+"<br>\n"
+"\n"
+"<p style=\"margin:0px 0px 9px 0px;\">Si vous avez déjà payé ces factures entre temps, veuillez ne pas considerer cet email.</p>\n"
+"\n"
+"% if object.company_id.overdue_reminder_attach_invoice:\n"
+"<p style=\"margin:0px 0px 9px 0px;\">Vous trouverez ci-joint les factures concernées.</p>\n"
+"% endif\n"
+"\n"
+"<p style=\"margin:0px 0px 9px 0px;\">Cordialement,</p>\n"
+"\n"
+"</div>\n"
+""
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:mail.template,subject:account_invoice_pre_duedate_reminder.pre_duedate_invoice_reminder_mail_template
+msgid "${object.company_id.name} - Rappel facture arrivant à échéance"
+msgstr "${object.company_id.name} - Rappel facture arrivant à échéance"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model,name:account_invoice_pre_duedate_reminder.model_res_company
+msgid "Companies"
+msgstr "Sociétés"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder_company_id
+msgid "Company id"
+msgstr "Société"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder_partner_id
+msgid "Customers"
+msgstr "Clients"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_account_config_settings_pre_duedate_reminder_interval_days
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_res_company_pre_duedate_reminder_interval_days
+msgid "Default Pre Due Date Reminder Interval (days)"
+msgstr "Interval rappel facture avant échéance (jours)"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder_display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: account_invoice_pre_duedate_reminder
+#: code:addons/account_invoice_pre_duedate_reminder/wizard/pre_duedate_reminder_wizard.py:42
+#, python-format
+msgid "Error in the PDF rendering of invoice %s."
+msgstr "Error in the PDF rendering of invoice %s."
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder_id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model,name:account_invoice_pre_duedate_reminder.model_account_invoice
+msgid "Invoice"
+msgstr "Facture"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder_invoice_ids
+msgid "Invoices"
+msgstr "Factures"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder___last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder_write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder_write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.ui.view,arch_db:account_invoice_pre_duedate_reminder.view_account_config_settings
+msgid "Pre Due Date Invoice Reminder"
+msgstr "Rappel facture arrivant à échéance"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_account_invoice_pre_duedate_reminder_mail_id
+msgid "Pre due date reminder email"
+msgstr "Email rappel facture arrivant à échéance"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model,name:account_invoice_pre_duedate_reminder.model_pre_duedate_reminder
+msgid "Wizard to reminder pre due date customer invoice"
+msgstr "Wizard to reminder pre due date customer invoice"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model,name:account_invoice_pre_duedate_reminder.model_account_config_settings
+msgid "account.config.settings"
+msgstr "account.config.settings"
+
