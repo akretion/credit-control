@@ -10,7 +10,11 @@
     "author": "Akretion,Odoo Community Association (OCA)",
     "maintainers": ["bguillot"],
     "website": "https://github.com/OCA/credit-control",
-    "depends": ["account", "account_dunning_contact"],
+    "depends": [
+        "account",
+        "account_dunning_contact",
+        "account_invoice_overdue_reminder",
+    ],
     "data": [
         "data/data.xml",
         "security/ir.model.access.csv",

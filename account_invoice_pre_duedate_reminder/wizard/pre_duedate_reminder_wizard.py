@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import base64
+from collections import defaultdict
 
 from odoo import Command, fields, models
 
@@ -21,6 +22,15 @@ class PreDuedateReminder(models.TransientModel):
         required=True,
         default=lambda self: self.env["res.company"]._company_default_get(),
     )
+
+    def total_residual(self):
+        self.ensure_one()
+        res = defaultdict(float)
+        for inv in self.invoice_ids:
+            res[inv.currency_id] += inv.amount_residual * (
+                inv.move_type == "out_refund" and -1 or 1
+            )
+        return res.items()
 
     def generate_mail(self):
         self.ensure_one()

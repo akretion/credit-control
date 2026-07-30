@@ -19,38 +19,136 @@
         <field name="email_from" />
         <field
             name="subject"
-        >${object.company_id.name} - Rappel facture arrivant à échéance</field>
-        <field name="email_to">${object.partner_id.email}</field>
+        >{{object.company_id.name}} - Upcoming invoice reminder</field>
+        <field name="email_to">{{object.partner_id.email}}</field>
         <field
             name="model_id"
             ref="account_invoice_pre_duedate_reminder.model_pre_duedate_reminder"
         />
         <field name="auto_delete" eval="True" />
-        <field name="lang" />
-        <field
-            name="body_html"
-        ><![CDATA[
-<div style="margin: 0px; padding: 0px; font-size: 13px;">
-<p>Cher client,</p>
+        <field name="lang">{{object.partner_id.lang}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px; font-size: 13px;">
+                <p>Dear customer,</p>
+                <p>
+                    The following invoices are not paid yet and their due date is
+                    approaching:
+                </p>
 
-<p>Les factures suivantes sont impayées et arrivent à échance:</p>
+                <table
+                    style="border-spacing: 0; border-collapse: collapse; width: 100%; text-align: center;"
+                >
+                    <tr>
+                        <th
+                            style="padding: 5px; border: 1px solid black;"
+                        >Invoice Number</th>
+                        <th
+                            style="padding: 5px; border: 1px solid black;"
+                        >Invoice Date</th>
+                        <th
+                            style="padding: 5px; border: 1px solid black;"
+                        >Payment Terms</th>
+                        <th style="padding: 5px; border: 1px solid black;">Due Date</th>
+                        <th
+                            style="padding: 5px; border: 1px solid black;"
+                        >Order Ref.</th>
+                        <th style="padding: 5px; border: 1px solid black;">Type</th>
+                        <th
+                            style="padding: 5px; border: 1px solid black;"
+                        >Total Untaxed</th>
+                        <th style="padding: 5px; border: 1px solid black;">Total</th>
+                        <th style="padding: 5px; border: 1px solid black;">Residual</th>
+                    </tr>
+                    <t
+                        t-foreach="object.invoice_ids.sorted(key='invoice_date')"
+                        t-as="inv"
+                    >
+                        <tr
+                            style="background-color:
+                            % if inv.move_type == 'out_refund':
+                                LightGray
+                            % endif
+                        "
+                        >
+                            <td style="padding: 5px; border: 1px solid black;">
+                                <t t-out="inv.name" />
+                            </td>
+                            <td style="padding: 5px; border: 1px solid black;">
+                                <t t-out="format_date(inv.invoice_date)" />
+                            </td>
+                            <td style="padding: 5px; border: 1px solid black;">
+                                <t t-out="inv.invoice_payment_term_id.name or ''" />
+                            </td>
+                            <td style="padding: 5px; border: 1px solid black;">
+                                <t t-out="format_date(inv.invoice_date_due)" />
+                            </td>
+                            <td style="padding: 5px; border: 1px solid black;">
+                                <t t-out="inv.ref or ''" />
+                            </td>
+                            <td style="padding: 5px; border: 1px solid black;">
+                                <t
+                                    t-out="dict(inv.fields_get(allfields=['move_type'])['move_type']['selection'])[inv.move_type]"
+                                />
+                            </td>
+                            <td
+                                style="padding: 5px; border: 1px solid black; text-align: right;"
+                            >
+                                <t
+                                    t-out="format_amount(inv.amount_untaxed * (inv.move_type == 'out_refund' and -1 or 1), inv.currency_id)"
+                                />
+                            </td>
+                            <td
+                                style="padding: 5px; border: 1px solid black; text-align: right;"
+                            >
+                                <t
+                                    t-out="format_amount(inv.amount_total * (inv.move_type == 'out_refund' and -1 or 1), inv.currency_id)"
+                                />
+                            </td>
+                            <td
+                                style="padding: 5px; border: 1px solid black; text-align: right;"
+                            >
+                                <t
+                                    t-out="format_amount(inv.amount_residual * (inv.move_type == 'out_refund' and -1 or 1), inv.currency_id)"
+                                />
+                            </td>
+                        </tr>
+                    </t>
+                    <t t-foreach="object.total_residual()" t-as="total_residual">
+                        <tr>
+                            <td />
+                            <td />
+                            <td />
+                            <td />
+                            <td />
+                            <td />
+                            <td
+                                colspan="2"
+                                style="padding: 5px; border: 1px solid black; font-weight: bold; text-align: right;"
+                            >
+                                Total
+                                Residual in
+                                <t t-out="total_residual[0].name" />:
+                            </td>
+                            <td
+                                style="padding: 5px; border: 1px solid black; font-weight: bold; text-align: right;"
+                            >
+                                <t
+                                    t-out="format_amount(total_residual[1], total_residual[0])"
+                                />
+                            </td>
+                        </tr>
+                    </t>
+                </table>
 
-% for inv in object.invoice_ids.sorted(key='invoice_date'):
-    <li>
-        Facture : ${inv.name}, date d'échéance : ${format_date(inv.invoice_date_due)}, montant total : ${format_amount(inv.amount_total_signed, inv.currency_id)}
-    </li>
-% endfor
-<br>
+                <p
+                >If you have already paid these invoices in the meantime, please ignore this email.</p>
 
-<p>Si vous avez déjà payé ces factures entre temps, veuillez ne pas considerer cet email.</p>
+                <t t-if="object.company_id.overdue_reminder_attach_invoice">
+                    <p>You will find the related invoices in attachment.</p>
+                </t>
 
-% if object.company_id.overdue_reminder_attach_invoice:
-<p>Vous trouverez ci-joint les factures concernées.</p>
-% endif
-
-<p>Cordialement,</p>
-
-</div>
-]]></field>
+                <p>Best regards,</p>
+            </div>
+        </field>
     </record>
 </odoo>

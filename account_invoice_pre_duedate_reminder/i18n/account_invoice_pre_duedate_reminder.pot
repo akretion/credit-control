@@ -1,17 +1,17 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* account_invoice_pre_duedate_reminder
+# 	* account_invoice_pre_duedate_reminder
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
 "Language-Team: \n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"Plural-Forms: \n"
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:mail.template,body_html:account_invoice_pre_duedate_reminder.pre_duedate_invoice_reminder_mail_template
@@ -96,192 +96,117 @@ msgid ""
 "            </div>\n"
 "        "
 msgstr ""
-"<div style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
-"                <p>Cher client,</p>\n"
-"                <p>\n"
-"                    Les factures suivantes sont impayées et arrivent à\n"
-"                    échéance :\n"
-"                </p>\n"
-"\n"
-"                <table style=\"border-spacing: 0; border-collapse: collapse; width: 100%; text-align: center;\">\n"
-"                    <tr>\n"
-"                        <th style=\"padding: 5px; border: 1px solid black;\">Numéro de facture</th>\n"
-"                        <th style=\"padding: 5px; border: 1px solid black;\">Date de la facture</th>\n"
-"                        <th style=\"padding: 5px; border: 1px solid black;\">Conditions de paiement</th>\n"
-"                        <th style=\"padding: 5px; border: 1px solid black;\">Date d'échéance</th>\n"
-"                        <th style=\"padding: 5px; border: 1px solid black;\">Référence de la commande</th>\n"
-"                        <th style=\"padding: 5px; border: 1px solid black;\">Type</th>\n"
-"                        <th style=\"padding: 5px; border: 1px solid black;\">Total (HT)</th>\n"
-"                        <th style=\"padding: 5px; border: 1px solid black;\">Total</th>\n"
-"                        <th style=\"padding: 5px; border: 1px solid black;\">Solde</th>\n"
-"                    </tr>\n"
-"                    <t t-foreach=\"object.invoice_ids.sorted(key='invoice_date')\" t-as=\"inv\">\n"
-"                        <tr style=\"background-color:                             % if inv.move_type == 'out_refund':                                 LightGray                             % endif                         \">\n"
-"                            <td style=\"padding: 5px; border: 1px solid black;\">\n"
-"                                <t t-out=\"inv.name\"/>\n"
-"                            </td>\n"
-"                            <td style=\"padding: 5px; border: 1px solid black;\">\n"
-"                                <t t-out=\"format_date(inv.invoice_date)\"/>\n"
-"                            </td>\n"
-"                            <td style=\"padding: 5px; border: 1px solid black;\">\n"
-"                                <t t-out=\"inv.invoice_payment_term_id.name or ''\"/>\n"
-"                            </td>\n"
-"                            <td style=\"padding: 5px; border: 1px solid black;\">\n"
-"                                <t t-out=\"format_date(inv.invoice_date_due)\"/>\n"
-"                            </td>\n"
-"                            <td style=\"padding: 5px; border: 1px solid black;\">\n"
-"                                <t t-out=\"inv.ref or ''\"/>\n"
-"                            </td>\n"
-"                            <td style=\"padding: 5px; border: 1px solid black;\">\n"
-"                                <t t-out=\"dict(inv.fields_get(allfields=['move_type'])['move_type']['selection'])[inv.move_type]\"/>\n"
-"                            </td>\n"
-"                            <td style=\"padding: 5px; border: 1px solid black; text-align: right;\">\n"
-"                                <t t-out=\"format_amount(inv.amount_untaxed * (inv.move_type == 'out_refund' and -1 or 1), inv.currency_id)\"/>\n"
-"                            </td>\n"
-"                            <td style=\"padding: 5px; border: 1px solid black; text-align: right;\">\n"
-"                                <t t-out=\"format_amount(inv.amount_total * (inv.move_type == 'out_refund' and -1 or 1), inv.currency_id)\"/>\n"
-"                            </td>\n"
-"                            <td style=\"padding: 5px; border: 1px solid black; text-align: right;\">\n"
-"                                <t t-out=\"format_amount(inv.amount_residual * (inv.move_type == 'out_refund' and -1 or 1), inv.currency_id)\"/>\n"
-"                            </td>\n"
-"                        </tr>\n"
-"                    </t>\n"
-"                    <t t-foreach=\"object.total_residual()\" t-as=\"total_residual\">\n"
-"                        <tr>\n"
-"                            <td/>\n"
-"                            <td/>\n"
-"                            <td/>\n"
-"                            <td/>\n"
-"                            <td/>\n"
-"                            <td/>\n"
-"                            <td colspan=\"2\" style=\"padding: 5px; border: 1px solid black; font-weight: bold; text-align: right;\">\n"
-"                                Total\n"
-"                                Résiduel en\n"
-"                                <t t-out=\"total_residual[0].name\"/>:\n"
-"                            </td>\n"
-"                            <td style=\"padding: 5px; border: 1px solid black; font-weight: bold; text-align: right;\">\n"
-"                                <t t-out=\"format_amount(total_residual[1], total_residual[0])\"/>\n"
-"                            </td>\n"
-"                        </tr>\n"
-"                    </t>\n"
-"                </table>\n"
-"\n"
-"                <p>Si vous avez déjà payé ces factures entre temps, veuillez ne pas tenir compte de cet email.</p>\n"
-"\n"
-"                <t t-if=\"object.company_id.overdue_reminder_attach_invoice\">\n"
-"                    <p>Vous trouverez ci-joint les factures concernées.</p>\n"
-"                </t>\n"
-"\n"
-"                <p>Cordialement,</p>\n"
-"            </div>\n"
-"        "
 #. module: account_invoice_pre_duedate_reminder
 #: model_terms:ir.ui.view,arch_db:account_invoice_pre_duedate_reminder.view_account_config_settings
 msgid "<span> days</span>"
-msgstr "<span> jours</span>"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model,name:account_invoice_pre_duedate_reminder.model_res_company
 msgid "Companies"
-msgstr "Sociétés"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder__company_id
 msgid "Company"
-msgstr "Société"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model,name:account_invoice_pre_duedate_reminder.model_res_config_settings
 msgid "Config Settings"
-msgstr "Paramètres de configuration"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model,name:account_invoice_pre_duedate_reminder.model_res_partner
 msgid "Contact"
-msgstr "Contact"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder__create_uid
 msgid "Created by"
-msgstr "Créé par"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder__create_date
 msgid "Created on"
-msgstr "Créé le"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder__partner_id
 msgid "Customers"
-msgstr "Clients"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_res_company__pre_duedate_reminder_interval_days
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_res_config_settings__pre_duedate_reminder_interval_days
 msgid "Default Pre Due Date Reminder Interval (days)"
-msgstr "Intervalle par défaut de rappel des factures avant échéance (jours)"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_res_partner__no_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_res_users__no_pre_duedate_reminder
 msgid "Disable Pre Duedate Invoice Reminder"
-msgstr "Désactiver le rappel des factures avant échéance"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder__display_name
 msgid "Display Name"
-msgstr "Nom d'affichage"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.actions.server,name:account_invoice_pre_duedate_reminder.ir_cron_pre_duedate_invoice_reminder_ir_actions_server
 #: model:mail.template,name:account_invoice_pre_duedate_reminder.pre_duedate_invoice_reminder_mail_template
 msgid "Invoice pre due date reminder"
-msgstr "Invoice pre due date reminder"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder__invoice_ids
 msgid "Invoices"
-msgstr "Factures"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model,name:account_invoice_pre_duedate_reminder.model_account_move
 msgid "Journal Entry"
-msgstr "Pièce comptable"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder__write_uid
 msgid "Last Updated by"
-msgstr "Mis à jour par"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder__write_date
 msgid "Last Updated on"
-msgstr "Mis à jour le"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model_terms:ir.ui.view,arch_db:account_invoice_pre_duedate_reminder.view_account_config_settings
+msgid "Pre Due Date Invoice Reminder"
+msgstr ""
+
+#. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_account_bank_statement_line__pre_duedate_reminder_mail_id
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_account_move__pre_duedate_reminder_mail_id
 msgid "Pre due date reminder email"
-msgstr "Email de rappel de facture avant échéance"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,help:account_invoice_pre_duedate_reminder.field_res_company__pre_duedate_reminder_interval_days
 #: model:ir.model.fields,help:account_invoice_pre_duedate_reminder.field_res_config_settings__pre_duedate_reminder_interval_days
 msgid "To activate this feature, set interval over 0."
-msgstr "Pour activer cette fonctionnalité, définir un intervalle supérieur à 0."
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model,name:account_invoice_pre_duedate_reminder.model_pre_duedate_reminder
 msgid "Wizard to reminder pre due date customer invoice"
-msgstr "Assistant de rappel des factures clients avant échéance"
+msgstr ""
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:mail.template,subject:account_invoice_pre_duedate_reminder.pre_duedate_invoice_reminder_mail_template
 msgid "{{object.company_id.name}} - Upcoming invoice reminder"
-msgstr "{{object.company_id.name}} - Rappel facture arrivant à échéance"
+msgstr ""
