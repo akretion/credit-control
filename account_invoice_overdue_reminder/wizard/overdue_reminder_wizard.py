@@ -245,6 +245,21 @@ class OverdueReminderStart(models.TransientModel):
             ]
         )
         warn_unrec = unrec_payments + unrec_refunds
+        partner_id = self._get_reminder_contact(commercial_partner)
+
+        vals = {
+            "partner_id": partner_id,
+            "commercial_partner_id": commercial_partner.id,
+            "user_id": self.env.user.id,
+            "invoice_ids": [Command.set(invs.ids)],
+            "company_id": self.company_id.id,
+            "warn_unreconciled_move_line_ids": [Command.set(warn_unrec.ids)],
+            "interface": self.interface,
+        }
+        return vals
+
+    def _get_reminder_contact(self, commercial_partner):
+        partner_id = commercial_partner.id
         if self.partner_policy == "last_reminder":
             last_reminder = self.env["overdue.reminder.action"].search(
                 [
@@ -272,17 +287,7 @@ class OverdueReminderStart(models.TransientModel):
             partner_id = last_inv.partner_id.id
         elif self.partner_policy == "invoice_contact":
             partner_id = commercial_partner.address_get(["invoice"])["invoice"]
-
-        vals = {
-            "partner_id": partner_id,
-            "commercial_partner_id": commercial_partner.id,
-            "user_id": self.env.user.id,
-            "invoice_ids": [Command.set(invs.ids)],
-            "company_id": self.company_id.id,
-            "warn_unreconciled_move_line_ids": [Command.set(warn_unrec.ids)],
-            "interface": self.interface,
-        }
-        return vals
+        return partner_id
 
 
 class OverdueReminderStartPayment(models.TransientModel):
