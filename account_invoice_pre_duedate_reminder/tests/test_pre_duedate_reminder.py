@@ -4,6 +4,7 @@
 from datetime import timedelta
 
 from odoo import fields
+from odoo.exceptions import ValidationError
 from odoo.tests import common
 
 
@@ -23,7 +24,8 @@ class TestPreDuedateReminder(common.TransactionCase):
         )
 
         cls.company = cls.env.company
-        cls.company.pre_duedate_reminder_interval_days = 5
+        # two reminders: 10 days and 5 days before the due date
+        cls.company.pre_duedate_reminder_interval_days = "10,5"
 
         cls.partner = cls.env["res.partner"].create(
             {
@@ -75,21 +77,28 @@ class TestPreDuedateReminder(common.TransactionCase):
             invoice.action_post()
         return invoice
 
+    def _due_in(self, days):
+        """Due date in N days (0 = today)."""
+        return fields.Date.today() + timedelta(days=days)
+
+    def _run_scheduler(self):
+        self.env["account.move"]._pre_duedate_reminder_scheduler()
+
     def test_scheduler_sends_reminder_within_window(self):
-        """Invoice due in 3 days should get a reminder (interval = 5 days)."""
-        due_date = fields.Date.today() + timedelta(days=3)
-        invoice = self._create_invoice(due_date)
+        """Invoice due in 3 days should get a reminder (delays = 10,5 days)."""
+        invoice = self._create_invoice(self._due_in(3))
 
         self.assertFalse(invoice.pre_duedate_reminder_mail_id)
 
-        self.env["account.move"]._pre_duedate_reminder_scheduler()
+        self._run_scheduler()
 
-        invoice.invalidate_model()
+        invoice.invalidate_recordset()
         self.assertTrue(
             invoice.pre_duedate_reminder_mail_id,
             "A reminder mail should have been created for an invoice due within the "
             "window.",
         )
+        self.assertEqual(invoice.pre_duedate_reminder_count, 1)
         # Check that the mail has attachments (the invoice PDF)
         mail = invoice.pre_duedate_reminder_mail_id
         self.assertTrue(
@@ -98,60 +107,47 @@ class TestPreDuedateReminder(common.TransactionCase):
         )
 
     def test_scheduler_ignores_invoice_outside_window(self):
-        """Invoice due in 10 days should NOT get a reminder (interval = 5 days)."""
-        due_date = fields.Date.today() + timedelta(days=10)
-        invoice = self._create_invoice(due_date)
+        """Invoice due in 11 days should NOT get a reminder (delays = 10,5)."""
+        invoice = self._create_invoice(self._due_in(11))
 
-        self.env["account.move"]._pre_duedate_reminder_scheduler()
+        self._run_scheduler()
 
-        invoice.invalidate_model()
+        invoice.invalidate_recordset()
         self.assertFalse(
             invoice.pre_duedate_reminder_mail_id,
             "No reminder should be sent for an invoice due outside the window.",
         )
+        self.assertEqual(invoice.pre_duedate_reminder_count, 0)
 
     def test_scheduler_ignores_paid_invoice(self):
         """A paid invoice should NOT get a reminder even if due within the window."""
-        due_date = fields.Date.today() + timedelta(days=3)
-        invoice = self._create_invoice(due_date)
-        # Simulate paid state
+        invoice = self._create_invoice(self._due_in(3))
         invoice.payment_state = "paid"
 
-        self.env["account.move"]._pre_duedate_reminder_scheduler()
+        self._run_scheduler()
 
-        invoice.invalidate_model()
-        self.assertFalse(
-            invoice.pre_duedate_reminder_mail_id,
-            "No reminder should be sent for a paid invoice.",
-        )
+        invoice.invalidate_recordset()
+        self.assertFalse(invoice.pre_duedate_reminder_mail_id)
 
     def test_scheduler_ignores_draft_invoice(self):
         """A draft invoice should NOT get a reminder."""
-        due_date = fields.Date.today() + timedelta(days=3)
-        invoice = self._create_invoice(due_date, state="draft")
+        invoice = self._create_invoice(self._due_in(3), state="draft")
 
-        self.env["account.move"]._pre_duedate_reminder_scheduler()
+        self._run_scheduler()
 
-        invoice.invalidate_model()
-        self.assertFalse(
-            invoice.pre_duedate_reminder_mail_id,
-            "No reminder should be sent for a draft invoice.",
-        )
+        invoice.invalidate_recordset()
+        self.assertFalse(invoice.pre_duedate_reminder_mail_id)
 
     def test_scheduler_ignores_overdue_invoice(self):
         """
         An already overdue invoice (due date in the past) should NOT get a reminder.
         """
-        due_date = fields.Date.today() - timedelta(days=2)
-        invoice = self._create_invoice(due_date)
+        invoice = self._create_invoice(self._due_in(-2))
 
-        self.env["account.move"]._pre_duedate_reminder_scheduler()
+        self._run_scheduler()
 
-        invoice.invalidate_model()
-        self.assertFalse(
-            invoice.pre_duedate_reminder_mail_id,
-            "No reminder should be sent for an overdue invoice.",
-        )
+        invoice.invalidate_recordset()
+        self.assertFalse(invoice.pre_duedate_reminder_mail_id)
 
     def test_scheduler_ignores_supplier_invoice(self):
         """A supplier invoice (in_invoice) should NOT get a reminder."""
@@ -160,7 +156,7 @@ class TestPreDuedateReminder(common.TransactionCase):
                 "move_type": "in_invoice",
                 "partner_id": self.partner.id,
                 "invoice_date": fields.Date.today(),
-                "invoice_date_due": fields.Date.today() + timedelta(days=3),
+                "invoice_date_due": self._due_in(3),
                 "journal_id": self.env["account.journal"]
                 .search(
                     [
@@ -198,46 +194,117 @@ class TestPreDuedateReminder(common.TransactionCase):
         )
         invoice.action_post()
 
-        self.env["account.move"]._pre_duedate_reminder_scheduler()
+        self._run_scheduler()
 
-        invoice.invalidate_model()
-        self.assertFalse(
-            invoice.pre_duedate_reminder_mail_id,
-            "No reminder should be sent for a supplier invoice.",
-        )
+        invoice.invalidate_recordset()
+        self.assertFalse(invoice.pre_duedate_reminder_mail_id)
 
-    def test_scheduler_does_not_send_duplicate(self):
-        """An invoice that already got a reminder should NOT get another one."""
-        due_date = fields.Date.today() + timedelta(days=3)
-        invoice = self._create_invoice(due_date)
+    def test_scheduler_does_not_send_twice_the_same_delay(self):
+        """An invoice already reminded for a delay should not be reminded again."""
+        self.company.pre_duedate_reminder_interval_days = "5"
+        invoice = self._create_invoice(self._due_in(3))
 
         # First run
-        self.env["account.move"]._pre_duedate_reminder_scheduler()
-        invoice.invalidate_model()
+        self._run_scheduler()
+        invoice.invalidate_recordset()
         first_mail = invoice.pre_duedate_reminder_mail_id
         self.assertTrue(first_mail)
+        self.assertEqual(invoice.pre_duedate_reminder_count, 1)
 
         # Second run
-        self.env["account.move"]._pre_duedate_reminder_scheduler()
-        invoice.invalidate_model()
+        self._run_scheduler()
+        invoice.invalidate_recordset()
         self.assertEqual(
             invoice.pre_duedate_reminder_mail_id,
             first_mail,
             "The same mail should remain; no duplicate should be created.",
         )
+        self.assertEqual(invoice.pre_duedate_reminder_count, 1)
+
+    def test_scheduler_reminds_once_per_run(self):
+        """Even inside several windows, only one reminder is sent per cron run."""
+        invoice = self._create_invoice(self._due_in(3))
+
+        self._run_scheduler()
+        invoice.invalidate_recordset()
+        self.assertEqual(
+            invoice.pre_duedate_reminder_count,
+            1,
+            "Only one reminder must be sent per cron run.",
+        )
+
+        self._run_scheduler()
+        invoice.invalidate_recordset()
+        self.assertEqual(invoice.pre_duedate_reminder_count, 2)
+
+    def test_scheduler_two_delays(self):
+        """Two reminders: one at the 1st delay, one when the 2nd delay is reached."""
+        invoice = self._create_invoice(self._due_in(7))
+
+        self._run_scheduler()
+        invoice.invalidate_recordset()
+        first_mail = invoice.pre_duedate_reminder_mail_id
+        self.assertEqual(invoice.pre_duedate_reminder_count, 1)
+
+        # the 2nd delay (5 days) is not reached yet: no new reminder
+        self._run_scheduler()
+        invoice.invalidate_recordset()
+        self.assertEqual(invoice.pre_duedate_reminder_count, 1)
+
+        # 4 days before the due date: the 2nd delay is reached
+        invoice.invoice_date_due = self._due_in(4)
+        self._run_scheduler()
+        invoice.invalidate_recordset()
+        self.assertEqual(invoice.pre_duedate_reminder_count, 2)
+        self.assertNotEqual(
+            invoice.pre_duedate_reminder_mail_id,
+            first_mail,
+            "The second reminder must be a new e-mail.",
+        )
+
+        # and there is no 3rd delay
+        self._run_scheduler()
+        invoice.invalidate_recordset()
+        self.assertEqual(invoice.pre_duedate_reminder_count, 2)
+
+    def test_scheduler_three_delays(self):
+        """The number of reminders follows the number of configured delays."""
+        self.company.pre_duedate_reminder_interval_days = "15,10,5"
+        invoice = self._create_invoice(self._due_in(12))
+
+        # 1st reminder, for the delay of 15 days
+        self._run_scheduler()
+        invoice.invalidate_recordset()
+        self.assertEqual(invoice.pre_duedate_reminder_count, 1)
+
+        # 2nd reminder, for the delay of 10 days
+        invoice.invoice_date_due = self._due_in(7)
+        self._run_scheduler()
+        invoice.invalidate_recordset()
+        self.assertEqual(invoice.pre_duedate_reminder_count, 2)
+
+        # 3rd reminder, for the delay of 5 days
+        invoice.invoice_date_due = self._due_in(4)
+        self._run_scheduler()
+        invoice.invalidate_recordset()
+        self.assertEqual(invoice.pre_duedate_reminder_count, 3)
+
+        # no 4th delay configured
+        self._run_scheduler()
+        invoice.invalidate_recordset()
+        self.assertEqual(invoice.pre_duedate_reminder_count, 3)
 
     def test_scheduler_groups_by_partner(self):
         """
         Multiple invoices for the same partner should produce a single wizard/mail.
         """
-        due_date = fields.Date.today() + timedelta(days=3)
-        inv1 = self._create_invoice(due_date)
-        inv2 = self._create_invoice(due_date)
+        inv1 = self._create_invoice(self._due_in(3))
+        inv2 = self._create_invoice(self._due_in(3))
 
-        self.env["account.move"]._pre_duedate_reminder_scheduler()
+        self._run_scheduler()
 
-        inv1.invalidate_model()
-        inv2.invalidate_model()
+        inv1.invalidate_recordset()
+        inv2.invalidate_recordset()
         self.assertTrue(inv1.pre_duedate_reminder_mail_id)
         self.assertTrue(inv2.pre_duedate_reminder_mail_id)
         # Both invoices should share the same mail
@@ -254,26 +321,45 @@ class TestPreDuedateReminder(common.TransactionCase):
             "The reminder mail should have one PDF attachment per invoice.",
         )
 
-    def test_company_interval_zero_disables_feature(self):
-        """
-        When pre_duedate_reminder_interval_days is 0, no reminders should be sent.
-        """
-        self.company.pre_duedate_reminder_interval_days = 0
-        due_date = fields.Date.today() + timedelta(days=3)
-        invoice = self._create_invoice(due_date)
+    def test_scheduler_disabled(self):
+        """When no delay is configured, no reminder should be sent."""
+        self.company.pre_duedate_reminder_interval_days = False
+        invoice = self._create_invoice(self._due_in(3))
 
-        self.env["account.move"]._pre_duedate_reminder_scheduler()
+        self._run_scheduler()
 
-        invoice.invalidate_model()
-        self.assertFalse(
-            invoice.pre_duedate_reminder_mail_id,
-            "No reminder should be sent when the interval is 0.",
-        )
+        invoice.invalidate_recordset()
+        self.assertFalse(invoice.pre_duedate_reminder_mail_id)
+
+    def test_scheduler_zero_delay_disabled(self):
+        """A zero delay must not send any reminder."""
+        self.company.pre_duedate_reminder_interval_days = "0"
+        invoice = self._create_invoice(self._due_in(3))
+
+        self._run_scheduler()
+
+        invoice.invalidate_recordset()
+        self.assertFalse(invoice.pre_duedate_reminder_mail_id)
+
+    def test_get_pre_duedate_reminder_delays(self):
+        self.assertEqual(self.company._get_pre_duedate_reminder_delays(), [10, 5])
+        self.company.pre_duedate_reminder_interval_days = "5"
+        self.assertEqual(self.company._get_pre_duedate_reminder_delays(), [5])
+        self.company.pre_duedate_reminder_interval_days = " 10, 5 ,10"
+        self.assertEqual(self.company._get_pre_duedate_reminder_delays(), [10, 5])
+        self.company.pre_duedate_reminder_interval_days = "0"
+        self.assertEqual(self.company._get_pre_duedate_reminder_delays(), [])
+        self.company.pre_duedate_reminder_interval_days = False
+        self.assertEqual(self.company._get_pre_duedate_reminder_delays(), [])
+
+    def test_invalid_delays(self):
+        for value in ("abc", "10;5", "-5", "10,", "5 days"):
+            with self.assertRaises(ValidationError), self.cr.savepoint():
+                self.company.pre_duedate_reminder_interval_days = value
 
     def test_wizard_generate_mail(self):
         """Directly test the wizard to ensure it creates a mail with attachments."""
-        due_date = fields.Date.today() + timedelta(days=3)
-        invoice = self._create_invoice(due_date)
+        invoice = self._create_invoice(self._due_in(3))
 
         wizard = self.env["pre.duedate.reminder"].create(
             {
@@ -284,11 +370,12 @@ class TestPreDuedateReminder(common.TransactionCase):
         )
         wizard.generate_mail()
 
-        invoice.invalidate_model()
+        invoice.invalidate_recordset()
         self.assertTrue(
             invoice.pre_duedate_reminder_mail_id,
             "The wizard should set pre_duedate_reminder_mail_id on the invoice.",
         )
+        self.assertEqual(invoice.pre_duedate_reminder_count, 1)
         mail = invoice.pre_duedate_reminder_mail_id
         self.assertEqual(mail.res_id, self.partner.id)
         self.assertEqual(mail.model, "res.partner")

@@ -175,10 +175,6 @@ msgstr ""
 "                <p>Cordialement,</p>\n"
 "            </div>\n"
 "        "
-#. module: account_invoice_pre_duedate_reminder
-#: model_terms:ir.ui.view,arch_db:account_invoice_pre_duedate_reminder.view_account_config_settings
-msgid "<span> days</span>"
-msgstr "<span> jours</span>"
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model,name:account_invoice_pre_duedate_reminder.model_res_company
@@ -218,8 +214,32 @@ msgstr "Clients"
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_res_company__pre_duedate_reminder_interval_days
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_res_config_settings__pre_duedate_reminder_interval_days
-msgid "Default Pre Due Date Reminder Interval (days)"
-msgstr "Intervalle par défaut de rappel des factures avant échéance (jours)"
+msgid "Default Pre Due Date Reminder Delays"
+msgstr "Délais par défaut de rappel des factures avant échéance"
+
+#. module: account_invoice_pre_duedate_reminder
+#: model_terms:ir.ui.view,arch_db:account_invoice_pre_duedate_reminder.view_account_config_settings
+msgid ""
+"Delay(s) in days before the invoice due date, separated by commas. For "
+"example '10,5' sends a reminder 10 days before the due date and another one "
+"5 days before. Leave empty to disable."
+msgstr ""
+"Délai(s) en jours avant la date d'échéance de la facture, séparés par des "
+"virgules. Par exemple '10,5' envoie un rappel 10 jours avant l'échéance et "
+"un autre 5 jours avant. Laisser vide pour désactiver. "
+
+#. module: account_invoice_pre_duedate_reminder
+#: model:ir.model.fields,help:account_invoice_pre_duedate_reminder.field_res_company__pre_duedate_reminder_interval_days
+#: model:ir.model.fields,help:account_invoice_pre_duedate_reminder.field_res_config_settings__pre_duedate_reminder_interval_days
+msgid ""
+"Delay(s) in days before the invoice due date, separated by commas: for "
+"example '10,5' sends a reminder 10 days before the due date and another one "
+"5 days before the due date. Leave empty to disable the feature."
+msgstr ""
+"Délai(s) en jours avant la date d'échéance de la facture, séparés par des "
+"virgules : par exemple '10,5' envoie un rappel 10 jours avant l'échéance et "
+"un autre 5 jours avant l'échéance. Laisser vide pour désactiver la "
+"fonctionnalité. "
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_res_partner__no_pre_duedate_reminder
@@ -254,6 +274,12 @@ msgid "Journal Entry"
 msgstr "Pièce comptable"
 
 #. module: account_invoice_pre_duedate_reminder
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_account_bank_statement_line__pre_duedate_reminder_mail_id
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_account_move__pre_duedate_reminder_mail_id
+msgid "Last Pre Due Date Reminder Email"
+msgstr "Dernier e-mail de rappel avant échéance"
+
+#. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder__write_uid
 msgid "Last Updated by"
 msgstr "Mis à jour par"
@@ -264,17 +290,37 @@ msgid "Last Updated on"
 msgstr "Mis à jour le"
 
 #. module: account_invoice_pre_duedate_reminder
-#: model_terms:ir.ui.view,arch_db:account_invoice_pre_duedate_reminder.view_account_config_settings
-#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_account_bank_statement_line__pre_duedate_reminder_mail_id
-#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_account_move__pre_duedate_reminder_mail_id
-msgid "Pre due date reminder email"
-msgstr "Email de rappel de facture avant échéance"
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_account_bank_statement_line__pre_duedate_reminder_count
+#: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_account_move__pre_duedate_reminder_count
+msgid "Number of Pre Due Date Reminders"
+msgstr "Nombre de rappels avant échéance"
 
 #. module: account_invoice_pre_duedate_reminder
-#: model:ir.model.fields,help:account_invoice_pre_duedate_reminder.field_res_company__pre_duedate_reminder_interval_days
-#: model:ir.model.fields,help:account_invoice_pre_duedate_reminder.field_res_config_settings__pre_duedate_reminder_interval_days
-msgid "To activate this feature, set interval over 0."
-msgstr "Pour activer cette fonctionnalité, définir un intervalle supérieur à 0."
+#: model:ir.model.fields,help:account_invoice_pre_duedate_reminder.field_account_bank_statement_line__pre_duedate_reminder_count
+#: model:ir.model.fields,help:account_invoice_pre_duedate_reminder.field_account_move__pre_duedate_reminder_count
+msgid ""
+"Number of pre due date reminders already sent for this invoice. It drives "
+"which reminder delay is used: the invoice is reminded at the delay of rank N"
+" when N reminders have already been sent."
+msgstr ""
+"Nombre de rappels avant échéance déjà envoyés pour cette facture. Il "
+"détermine le délai de rappel utilisé : la facture est rappelée au délai de "
+"rang N lorsque N rappels ont déjà été envoyés. "
+
+#. module: account_invoice_pre_duedate_reminder
+#: model_terms:ir.ui.view,arch_db:account_invoice_pre_duedate_reminder.view_account_config_settings
+msgid "Pre Due Date Invoice Reminder"
+msgstr "Rappel des factures avant échéance"
+
+#. module: account_invoice_pre_duedate_reminder
+#. odoo-python
+#: code:addons/account_invoice_pre_duedate_reminder/models/res_company.py:0
+msgid ""
+"The reminder delays must be positive integer numbers of days, separated by "
+"commas, for example '10,5'."
+msgstr ""
+"Les délais de rappel doivent être des nombres entiers de jours positifs, "
+"séparés par des virgules, par exemple '10,5'. "
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model,name:account_invoice_pre_duedate_reminder.model_pre_duedate_reminder
@@ -285,3 +331,4 @@ msgstr "Assistant de rappel des factures clients avant échéance"
 #: model:mail.template,subject:account_invoice_pre_duedate_reminder.pre_duedate_invoice_reminder_mail_template
 msgid "{{object.company_id.name}} - Upcoming invoice reminder"
 msgstr "{{object.company_id.name}} - Rappel facture arrivant à échéance"
+

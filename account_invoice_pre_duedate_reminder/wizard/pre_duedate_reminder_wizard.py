@@ -77,4 +77,11 @@ class PreDuedateReminder(models.TransientModel):
             )
             attachment_ids.append(attach.id)
         mail.write({"attachment_ids": [Command.set(attachment_ids)]})
-        self.invoice_ids.write({"pre_duedate_reminder_mail_id": mail.id})
+        for invoice in self.invoice_ids:
+            reminder_count = invoice.pre_duedate_reminder_count + 1
+            invoice.write(
+                {
+                    "pre_duedate_reminder_mail_id": mail.id,
+                    "pre_duedate_reminder_count": reminder_count,
+                }
+            )

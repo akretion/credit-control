@@ -11,12 +11,15 @@
         <field name="arch" type="xml">
             <block id="invoicing_settings" position="after">
                 <block id="pre_due_reminder" title="Pre Due Date Invoice Reminder">
-                    <setting id="pre_duedate_reminder_interval_days">
+                    <setting
+                        id="pre_duedate_reminder_interval_days"
+                        help="Delay(s) in days before the invoice due date, separated by commas. For example '10,5' sends a reminder 10 days before the due date and another one 5 days before. Leave empty to disable."
+                    >
                         <field
                             name="pre_duedate_reminder_interval_days"
                             class="oe_inline"
+                            placeholder="10,5"
                         />
-                        <span> days</span>
                     </setting>
                 </block>
             </block>

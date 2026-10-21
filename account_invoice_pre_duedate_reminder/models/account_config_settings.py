@@ -7,6 +7,6 @@ from odoo import fields, models
 class AccountConfigSettings(models.TransientModel):
     _inherit = "res.config.settings"
 
-    pre_duedate_reminder_interval_days = fields.Integer(
+    pre_duedate_reminder_interval_days = fields.Char(
         related="company_id.pre_duedate_reminder_interval_days", readonly=False
     )

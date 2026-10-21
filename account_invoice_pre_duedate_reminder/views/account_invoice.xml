@@ -11,6 +11,7 @@
         <field name="arch" type="xml">
             <field name="is_move_sent" position="after">
                 <field name="pre_duedate_reminder_mail_id" readonly="1" />
+                <field name="pre_duedate_reminder_count" readonly="1" />
             </field>
         </field>
     </record>
