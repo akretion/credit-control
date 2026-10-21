@@ -383,3 +383,8 @@ class TestPreDuedateReminder(common.TransactionCase):
             mail.attachment_ids,
             "The wizard should attach the invoice PDF to the mail.",
         )
+        # the reminder is logged on the invoice, with a link to the mail: the
+        # subject of the mail is used as the text of the link (language
+        # independent assertion)
+        chatter = " ".join(invoice.message_ids.mapped(lambda m: m.body or ""))
+        self.assertIn(mail.subject, chatter)

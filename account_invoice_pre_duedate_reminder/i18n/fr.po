@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* account_invoice_pre_duedate_reminder
+# * account_invoice_pre_duedate_reminder
 #
 msgid ""
 msgstr ""
@@ -261,7 +261,7 @@ msgstr "ID"
 #: model:ir.actions.server,name:account_invoice_pre_duedate_reminder.ir_cron_pre_duedate_invoice_reminder_ir_actions_server
 #: model:mail.template,name:account_invoice_pre_duedate_reminder.pre_duedate_invoice_reminder_mail_template
 msgid "Invoice pre due date reminder"
-msgstr "Invoice pre due date reminder"
+msgstr "Rappel avant échéance de facture"
 
 #. module: account_invoice_pre_duedate_reminder
 #: model:ir.model.fields,field_description:account_invoice_pre_duedate_reminder.field_pre_duedate_reminder__invoice_ids
@@ -332,3 +332,12 @@ msgstr "Assistant de rappel des factures clients avant échéance"
 msgid "{{object.company_id.name}} - Upcoming invoice reminder"
 msgstr "{{object.company_id.name}} - Rappel facture arrivant à échéance"
 
+#. module: account_invoice_pre_duedate_reminder
+#: code:addons/account_invoice_pre_duedate_reminder/wizard/pre_duedate_reminder_wizard.py:0
+#, odoo-python
+msgid ""
+"<strong>Pre due date reminder</strong> sent by mail: <a href=# data-oe-"
+"model=mail.mail data-oe-id=%(mail_id)s>%(mail_subject)s</a>."
+msgstr ""
+"<strong>Rappel avant échéance</strong> envoyé par e-mail : <a href=# data-"
+"oe-model=mail.mail data-oe-id=%(mail_id)s>%(mail_subject)s</a>."

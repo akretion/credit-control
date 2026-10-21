@@ -4,6 +4,8 @@
 import base64
 from collections import defaultdict
 
+from markupsafe import Markup
+
 from odoo import Command, fields, models
 
 
@@ -84,4 +86,15 @@ class PreDuedateReminder(models.TransientModel):
                     "pre_duedate_reminder_mail_id": mail.id,
                     "pre_duedate_reminder_count": reminder_count,
                 }
+            )
+            invoice.message_post(
+                body=Markup(
+                    self.env._(
+                        "<strong>Pre due date reminder</strong> sent by mail: "
+                        "<a href=# data-oe-model=mail.mail "
+                        "data-oe-id=%(mail_id)s>%(mail_subject)s</a>.",
+                        mail_id=mail.id,
+                        mail_subject=mail.subject,
+                    )
+                )
             )
