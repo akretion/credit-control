@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_credit_rating_user,credit.rating user,model_credit_rating,base.group_user,1,1,1,0
+access_credit_rating_manager,credit.rating manager,model_credit_rating,base.group_partner_manager,1,1,1,1
+access_credit_rating_search,credit.rating.search,model_credit_rating_search,base.group_user,1,1,1,1
+access_credit_rating_search_line,credit.rating.search.line,model_credit_rating_search_line,base.group_user,1,1,1,1
