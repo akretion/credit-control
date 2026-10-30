@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2026 Akretion France (http://www.akretion.com/)
+  @author Benoît Guillot <benoit.guillot@akretion.com>
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo noupdate="1">
+    <record id="ir_cron_overdue_reminder" model="ir.cron">
+        <field name="name">Overdue Invoice Reminder: automatic sending</field>
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="state">code</field>
+        <field name="code">model._overdue_reminder_scheduler()</field>
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="False" />
+    </record>
+</odoo>

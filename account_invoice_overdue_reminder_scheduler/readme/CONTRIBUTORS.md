@@ -1,0 +1,2 @@
+- Alexis de Lattre \<<alexis.delattre@akretion.com>\>
+- Benoît Guillot \<<benoit.guillot@akretion.com>\>

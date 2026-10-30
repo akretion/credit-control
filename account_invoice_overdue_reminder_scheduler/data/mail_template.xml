@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2026 Akretion France (http://www.akretion.com/)
+  @author Benoît Guillot <benoit.guillot@akretion.com>
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo noupdate="1">
+    <record id="overdue_reminder_alert_mail_template" model="mail.template">
+        <field name="name">Overdue Invoice Reminder Alert</field>
+        <field
+            name="model_id"
+            ref="account_invoice_overdue_reminder.model_overdue_reminder_step"
+        />
+        <field name="auto_delete" eval="False" />
+        <field name="lang">{{object.company_id.partner_id.lang}}</field>
+        <field name="email_from">{{object.company_id.email}}</field>
+        <!-- Set here the e-mail address(es) that must be notified -->
+        <field name="email_to">{{object.company_id.email}}</field>
+        <field
+            name="subject"
+        >{{object.company_id.name}} - Overdue reminder not sent for {{object.commercial_partner_id.name}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px; font-size: 13px;">
+                <p>Hello,</p>
+                <p
+                >The automatic overdue reminder could not be sent for the following customer:</p>
+
+                <table
+                    style="border-spacing: 0; border-collapse: collapse; width: 100%; text-align: center;"
+                >
+                    <tr>
+                        <th style="padding: 5px; border: 1px solid black;">Customer</th>
+                        <th
+                            style="padding: 5px; border: 1px solid black;"
+                        >Contact to Remind</th>
+                        <th
+                            style="padding: 5px; border: 1px solid black;"
+                        >Overdue Invoices</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px; border: 1px solid black;">
+                            <t
+                                t-out="object.commercial_partner_id.display_name or ''"
+                            />
+                        </td>
+                        <td style="padding: 5px; border: 1px solid black;">
+                            <t t-out="object.partner_id.display_name or ''" />
+                        </td>
+                        <td style="padding: 5px; border: 1px solid black;">
+                            <t t-foreach="object.invoice_ids" t-as="inv">
+                                <t t-out="inv.name" />
+                            </t>
+                        </td>
+                    </tr>
+                </table>
+
+                <p>
+                    <strong>Reason:</strong>
+                    <t t-out="object.error or ''" />
+                </p>
+
+                <p
+                >Please fix the problem (for example a missing e-mail address on the contact) so that the reminder is sent at the next run of the automatic reminder.</p>
+
+                <p>Regards,</p>
+
+                <t t-if="user.signature">
+                    <p>
+                        <t t-out="user.signature or ''" />
+                    </p>
+                </t>
+            </div>
+        </field>
+    </record>
+</odoo>

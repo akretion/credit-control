@@ -1,0 +1,5 @@
+Tick the option *Automatic Overdue Reminder Sending* in the section *Overdue Invoice Reminder* of the settings (*Invoicing > Configuration > Settings*), then activate the scheduled action *Overdue Invoice Reminder: automatic sending* (menu *Settings > Technical > Scheduled Actions*): it is **inactive by default** to avoid sending reminders on a freshly configured database. This daily scheduled action runs the reminder wizard and validates it automatically, using the *Trigger Delay*, the *Minimum Delay Since Last Reminder* and the *Contact to Remind* configured for the company.
+
+The e-mail is queued by the scheduled action and really sent by the *Mail: Email Queue Manager* scheduled action of the *Mail* module.
+
+When an automatic reminder cannot be sent, an alert e-mail is sent for that customer, using the mail template *Overdue Invoice Reminder Alert*: set the recipients you want in its *E-mail To* field (menu *Settings > Technical > E-mail > Templates*). Typical causes are a customer contact without e-mail address, a broken reminder e-mail template, or an error while generating the invoice PDF. There is no alert when there is simply nothing to remind.

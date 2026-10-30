@@ -1,0 +1,190 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_invoice_overdue_reminder_scheduler
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2025-10-14 14:40+0000\n"
+"Last-Translator: Rémi <remi@le-filament.com>\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.10.4\n"
+
+#. module: account_invoice_overdue_reminder_scheduler
+#: model:mail.template,body_html:account_invoice_overdue_reminder_scheduler.overdue_reminder_alert_mail_template
+msgid ""
+"<div style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"                <p>Hello,</p>\n"
+"                <p>The automatic overdue reminder could not be sent for the following customer:</p>\n"
+"\n"
+"                <table style=\"border-spacing: 0; border-collapse: collapse; width: 100%; text-align: center;\">\n"
+"                    <tr>\n"
+"                        <th style=\"padding: 5px; border: 1px solid black;\">Customer</th>\n"
+"                        <th style=\"padding: 5px; border: 1px solid black;\">Contact to Remind</th>\n"
+"                        <th style=\"padding: 5px; border: 1px solid black;\">Overdue Invoices</th>\n"
+"                    </tr>\n"
+"                    <tr>\n"
+"                        <td style=\"padding: 5px; border: 1px solid black;\">\n"
+"                            <t t-out=\"object.commercial_partner_id.display_name or ''\"/>\n"
+"                        </td>\n"
+"                        <td style=\"padding: 5px; border: 1px solid black;\">\n"
+"                            <t t-out=\"object.partner_id.display_name or ''\"/>\n"
+"                        </td>\n"
+"                        <td style=\"padding: 5px; border: 1px solid black;\">\n"
+"                            <t t-foreach=\"object.invoice_ids\" t-as=\"inv\">\n"
+"                                <t t-out=\"inv.name\"/>\n"
+"                            </t>\n"
+"                        </td>\n"
+"                    </tr>\n"
+"                </table>\n"
+"\n"
+"                <p>\n"
+"                    <strong>Reason:</strong>\n"
+"                    <t t-out=\"object.error or ''\"/>\n"
+"                </p>\n"
+"\n"
+"                <p>Please fix the problem (for example a missing e-mail address on the contact) so that the reminder is sent at the next run of the automatic reminder.</p>\n"
+"\n"
+"                <p>Regards,</p>\n"
+"\n"
+"                <t t-if=\"user.signature\">\n"
+"                    <p>\n"
+"                        <t t-out=\"user.signature or ''\"/>\n"
+"                    </p>\n"
+"                </t>\n"
+"            </div>\n"
+"        "
+msgstr ""
+"<div style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"                <p>Bonjour,</p>\n"
+"                <p>La relance automatique n'a pas pu être envoyée pour le client suivant :</p>\n"
+"\n"
+"                <table style=\"border-spacing: 0; border-collapse: collapse; width: 100%; text-align: center;\">\n"
+"                    <tr>\n"
+"                        <th style=\"padding: 5px; border: 1px solid black;\">Client</th>\n"
+"                        <th style=\"padding: 5px; border: 1px solid black;\">Contact à relancer</th>\n"
+"                        <th style=\"padding: 5px; border: 1px solid black;\">Factures échues</th>\n"
+"                    </tr>\n"
+"                    <tr>\n"
+"                        <td style=\"padding: 5px; border: 1px solid black;\">\n"
+"                            <t t-out=\"object.commercial_partner_id.display_name or ''\"/>\n"
+"                        </td>\n"
+"                        <td style=\"padding: 5px; border: 1px solid black;\">\n"
+"                            <t t-out=\"object.partner_id.display_name or ''\"/>\n"
+"                        </td>\n"
+"                        <td style=\"padding: 5px; border: 1px solid black;\">\n"
+"                            <t t-foreach=\"object.invoice_ids\" t-as=\"inv\">\n"
+"                                <t t-out=\"inv.name\"/>\n"
+"                            </t>\n"
+"                        </td>\n"
+"                    </tr>\n"
+"                </table>\n"
+"\n"
+"                <p>\n"
+"                    <strong>Raison :</strong>\n"
+"                    <t t-out=\"object.error or ''\"/>\n"
+"                </p>\n"
+"\n"
+"                <p>Merci de corriger le problème (par exemple une adresse e-mail manquante sur le contact) afin que la relance soit envoyée lors de la prochaine exécution de la relance automatique.</p>\n"
+"\n"
+"                <p>Cordialement,</p>\n"
+"\n"
+"                <t t-if=\"user.signature\">\n"
+"                    <p>\n"
+"                        <t t-out=\"user.signature or ''\"/>\n"
+"                    </p>\n"
+"                </t>\n"
+"            </div>\n"
+"        "
+
+#. module: account_invoice_overdue_reminder_scheduler
+#: model:ir.model.fields,field_description:account_invoice_overdue_reminder_scheduler.field_res_company__overdue_reminder_auto_send
+#: model:ir.model.fields,field_description:account_invoice_overdue_reminder_scheduler.field_res_config_settings__overdue_reminder_auto_send
+msgid "Automatic Overdue Reminder Sending"
+msgstr "Envoi automatique des relances client"
+
+#. module: account_invoice_overdue_reminder_scheduler
+#: model:ir.model,name:account_invoice_overdue_reminder_scheduler.model_res_company
+msgid "Companies"
+msgstr "Sociétés"
+
+#. module: account_invoice_overdue_reminder_scheduler
+#: model:ir.model,name:account_invoice_overdue_reminder_scheduler.model_res_config_settings
+msgid "Config Settings"
+msgstr "Paramètres de configuration"
+
+#. module: account_invoice_overdue_reminder_scheduler
+#: model:ir.model.fields,field_description:account_invoice_overdue_reminder_scheduler.field_overdue_reminder_step__error
+msgid "Error"
+msgstr "Erreur"
+
+#. module: account_invoice_overdue_reminder_scheduler
+#: model:ir.model.fields,help:account_invoice_overdue_reminder_scheduler.field_res_company__overdue_reminder_auto_send
+#: model:ir.model.fields,help:account_invoice_overdue_reminder_scheduler.field_res_config_settings__overdue_reminder_auto_send
+msgid ""
+"If enabled, the overdue reminders are sent automatically by e-mail by the "
+"scheduled action 'Overdue Invoice Reminder: automatic sending'. The trigger "
+"delay and the minimum delay since last reminder configured above are used to"
+" select the invoices to remind."
+msgstr ""
+"Si cette option est activée, les relances client sont envoyées "
+"automatiquement par e-mail par l'action planifiée « Relance client : envoi "
+"automatique ». Le délai de déclenchement et le délai minimum depuis la "
+"dernière relance configurés ci-dessus sont utilisés pour sélectionner les "
+"factures à relancer. "
+
+#. module: account_invoice_overdue_reminder_scheduler
+#: model_terms:ir.ui.view,arch_db:account_invoice_overdue_reminder_scheduler.view_account_config_settings
+msgid ""
+"If enabled, the reminders are sent automatically by e-mail when the "
+"scheduled action 'Overdue Invoice Reminder: automatic sending' is active "
+"(Settings > Technical > Scheduled Actions)."
+msgstr ""
+"Si cette option est activée, les relances sont envoyées automatiquement par "
+"e-mail lorsque l'action planifiée « Relance client : envoi automatique » est"
+" active (Paramètres > Technique > Actions planifiées)."
+
+#. module: account_invoice_overdue_reminder_scheduler
+#: model:ir.model,name:account_invoice_overdue_reminder_scheduler.model_account_move
+msgid "Journal Entry"
+msgstr "Pièce comptable"
+
+#. module: account_invoice_overdue_reminder_scheduler
+#: model:mail.template,name:account_invoice_overdue_reminder_scheduler.overdue_reminder_alert_mail_template
+msgid "Overdue Invoice Reminder Alert"
+msgstr "Alerte de relance client"
+
+#. module: account_invoice_overdue_reminder_scheduler
+#: model:ir.actions.server,name:account_invoice_overdue_reminder_scheduler.ir_cron_overdue_reminder_ir_actions_server
+msgid "Overdue Invoice Reminder: automatic sending"
+msgstr "Relance client : envoi automatique"
+
+#. module: account_invoice_overdue_reminder_scheduler
+#: model:ir.model,name:account_invoice_overdue_reminder_scheduler.model_overdue_reminder_step
+msgid "Overdue reminder wizard step"
+msgstr "Étape de relance client"
+
+#. module: account_invoice_overdue_reminder_scheduler
+#: model:ir.model.fields,help:account_invoice_overdue_reminder_scheduler.field_overdue_reminder_step__error
+msgid ""
+"Reason why the automatic reminder could not be sent. It is set by the "
+"overdue reminder scheduler and used in the alert e-mail."
+msgstr ""
+"Raison pour laquelle la relance automatique n'a pas pu être envoyée. Ce "
+"champ est renseigné par la tâche planifiée de relance et utilisé dans "
+"l'e-mail d'alerte. "
+
+#. module: account_invoice_overdue_reminder_scheduler
+#: model:mail.template,subject:account_invoice_overdue_reminder_scheduler.overdue_reminder_alert_mail_template
+msgid ""
+"{{object.company_id.name}} - Overdue reminder not sent for "
+"{{object.commercial_partner_id.name}}"
+msgstr ""
+"{{object.company_id.name}} - Relance non envoyée pour "
+"{{object.commercial_partner_id.name}} "

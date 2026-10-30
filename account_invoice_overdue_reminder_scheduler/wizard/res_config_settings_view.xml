@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2026 Akretion France (http://www.akretion.com/)
+  @author Benoît Guillot <benoit.guillot@akretion.com>
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="view_account_config_settings" model="ir.ui.view">
+        <field name="name">overdue.reminder.scheduler.res.config.settings.form</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <block id="overdue_reminder" position="inside">
+                <setting
+                    id="overdue_reminder_auto_send"
+                    help="If enabled, the reminders are sent automatically by e-mail when the scheduled action 'Overdue Invoice Reminder: automatic sending' is active (Settings &gt; Technical &gt; Scheduled Actions)."
+                >
+                    <field name="overdue_reminder_auto_send" />
+                </setting>
+            </block>
+        </field>
+    </record>
+</odoo>
