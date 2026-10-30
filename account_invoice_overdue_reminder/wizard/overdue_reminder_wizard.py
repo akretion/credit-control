@@ -12,6 +12,8 @@ from markupsafe import Markup
 from odoo import Command, _, api, fields, models, tools
 from odoo.exceptions import UserError
 
+from ..exceptions import OverdueReminderNothingToDo
+
 logger = logging.getLogger(__name__)
 
 MOD = "account_invoice_overdue_reminder"
@@ -177,7 +179,7 @@ class OverdueReminderStart(models.TransientModel):
                 action = orso.create(vals)
                 action_ids.append(action.id)
         if not action_ids:
-            raise UserError(_("There are no overdue reminders."))
+            raise OverdueReminderNothingToDo(_("There are no overdue reminders."))
         if self.interface == "onebyone":
             xid = MOD + ".overdue_reminder_step_onebyone_action"
             action = self.env["ir.actions.actions"]._for_xml_id(xid)
