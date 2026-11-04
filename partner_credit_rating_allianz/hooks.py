@@ -7,11 +7,9 @@ DEFAULTS = {
     ),
     "allianz_trade.idp_base_prod": "https://api.allianz-trade.com/v1/idp",
     "allianz_trade.gradecheck_base_uat": (
-        "https://api-services.uat.1placedessaisons.com/uatm/grade-check/v1/tci"
+        "https://api-services.uat.1placedessaisons.com/uatm/grade-check/v1"
     ),
-    "allianz_trade.gradecheck_base_prod": (
-        "https://api.allianz-trade.com/grade-check/v1/tci"
-    ),
+    "allianz_trade.gradecheck_base_prod": "https://api.allianz-trade.com/grade-check/v1",
 }
 
 

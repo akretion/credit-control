@@ -160,10 +160,26 @@ class CreditRating(models.Model):
 
     @api.model
     def _allianz_result(self, company):
+        address = company.get("address") or {}
+        ids = {
+            ident.get("idTypeCode"): ident.get("idValue")
+            for ident in company.get("companyIdentifiers") or []
+        }
+        street = " ".join(
+            filter(None, [address.get("streetNumber"), address.get("streetName")])
+        )
         return {
             "ref": company.get("companyId"),
-            "name": company.get("companyName") or company.get("name"),
-            "country_code": company.get("countryCode"),
+            "name": (company.get("legalData") or {}).get("companyName"),
+            "street": street,
+            "zip": next(
+                (pc.get("postCodeValue") for pc in address.get("postCodes") or []),
+                False,
+            ),
+            "city": address.get("town"),
+            "country_code": address.get("countryCode"),
+            "registry": ids.get("SIREN") or ids.get("SIRET"),
+            "vat": ids.get("VAT"),
         }
 
     def _fetch_allianz(self):
