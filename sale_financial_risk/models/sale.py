@@ -43,10 +43,12 @@ class SaleOrder(models.Model):
                         exception_msg + " Souhaitez vous forcer la confirmation ?",
                         self.env.ref('sale_financial_risk.action_force_confirm_sale').id,
                         "Continuer",
-                        additional_context={
-                        'active_model': 'sale.order',
-                        'active_id': order.id
-                        }
+                        additional_context = dict(
+                            self.env.context,
+                            active_model="sale.order",
+                            active_id=order.id
+                        ),
+
                     )
 
 
